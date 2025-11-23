@@ -1,0 +1,41 @@
+Data Variable         Description
+===================== ==========================================
+Date                  Date in year-month-day format 
+Windspeed             Speed of the wind in meters per sec (m/s)
+Rented Bike count     Count of bikes rented each hour
+Visibility            Visibility in meters
+Hour                  Hour of the day 
+Dew point temperature Dew point temperature in Celsius
+Temperature           Temperature in Celsius
+Solar radiation       Radient energy from the sun measured in MJ/m2
+Humidity              Humidity in percentage
+Rainfall              Rainfall in mm
+Snowfall              Snowfall in cm
+Seasons               Season of the year - Winter, Summary, Spring, and Fall
+Holiday               Is it a holiday? Holiday/ No holiday
+Functional Day        Bike rented during functional (Fun) and nonfunctional hours (NoFunc)
+
+
+
+ Task: Based on rented bike count, the hour of the day, the day's temperature, humidity,
+ wind speed, rainfall, holidays, and many other factors, build a model to predict the bike
+ count required each hour for a stable supply of rental bikes.
+
+ • Load the dataset
+ • Check for null values in any columns and handle the missing values
+ • Convert Date columns to Date format and extract day, month, day of week, and
+ weekdays/weekend from date column
+ • Check correlation of features using heatmap
+ • Plot the distribution plot of Rented Bike Count
+ • Plot the histogram of all numerical features
+ • Plot the box plot of Rented Bike Count against all the categorical features (Hint: Categorical
+ features on X-axis and Rented Bike Count on Y-axis)
+ • Plot the Seaborn catplot of Rented Bike Count against features like Hour, Holiday, Rainfall
+ (mm), Snowfall (cm), weekdays, weekend, and give your inferences.
+ • Encode the categorical features into numerical features.
+ (Hint: use get_dummies)
+ • Identify the target variable and split the dataset into train and test with a ratio of 80:20 and
+ random state 1
+ • Perform Standard Scaling of the train dataset.
+ • Perform Linear Regression, Lasso Regression, and Ridge Regression to predict the bike
+ count required each hour and compare the results.
