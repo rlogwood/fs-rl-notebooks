@@ -1,8 +1,0 @@
-numpy==2.3.0
-pandas
-matplotlib
-#mpl_toolkits
-seaborn
-#ipywidgets
-scipy
-scikit-learn
