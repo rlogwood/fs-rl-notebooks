@@ -1,4 +1,4 @@
 
 # Supporting Materials
 
-[Understanding Regularization](./docs/Understanding_Regularization.md)
+[Understanding Regularization](./docs/UnderstandingRegularization.md)
