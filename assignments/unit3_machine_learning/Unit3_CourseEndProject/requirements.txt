@@ -17,3 +17,6 @@ notebook>=7.0.0
 
 # Optional but useful
 scipy>=1.10.0
+
+xgboost
+plotly
