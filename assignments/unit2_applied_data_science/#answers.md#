@@ -1,0 +1,247 @@
+# Answers to Data Science Questions
+
+---
+
+## Question 1
+**All of these**
+
+Data science involves organizing, processing, and analyzing data to extract meaningful insights.
+
+---
+
+## Question 2
+**Communication strategies**
+
+While communication is important in data science, "communication strategies" is not a standard phase in the data science process. The typical phases include Discovery, Data Preparation, Model Planning, Model Building, and Operationalizing.
+
+---
+
+## Question 3
+**Multiple answers:**
+- It can take an unlimited number of arguments ✓
+- It can return multiple values ✓
+- It does not return anything until you add a return statement ✓
+
+Python functions can accept unlimited arguments (using *args and **kwargs), return multiple values as tuples, and return None by default without an explicit return statement.
+
+---
+
+## Question 4
+**User-defined function**
+
+---
+
+## Question 5
+**def**
+
+The keyword must be lowercase.
+
+---
+
+## Question 6
+**func()**
+
+---
+
+## Question 7
+**NumPy**
+
+NumPy is similar to Pandas as both handle data structures and numerical operations.
+
+---
+
+## Question 8
+**Both A and C**
+
+MatplotLib and SciPy are commonly used with NumPy.
+
+---
+
+## Question 9
+**Multiple answers:**
+- Mathematical and logical operations on arrays ✓
+- Fourier transforms and routines for shape manipulation ✓
+
+---
+
+## Question 10
+**The concept of determinant is applicable only to square matrices.**
+
+---
+
+## Question 11
+**Multiple answers:**
+- Machine learning ✓
+- Computer vision ✓
+- Visualization of data ✓
+- Neuroscience ✓
+
+All are valid applications of eigenvectors.
+
+---
+
+## Question 12
+**m*n**
+
+When multiplying matrices A (m×p) and B (p×n), the result is m×n.
+
+---
+
+## Question 13
+**Transpose**
+
+---
+
+## Question 14
+**Parameter**
+
+---
+
+## Question 15
+**Descriptive statistics**
+
+---
+
+## Question 16
+**Skewness**
+
+---
+
+## Question 17
+**Mode**
+
+Mode is a measure of central tendency, not dispersion.
+
+---
+
+## Question 18
+**Mean**
+
+---
+
+## Question 19
+**Bernoulli distribution**
+
+---
+
+## Question 20
+**Probability density function**
+
+---
+
+## Question 21
+**Multiple answers:**
+- The cumulative distribution function of a real valued random variable X, evaluated at x, is the probability that X will take a value less than or equal to x ✓
+- Cumulative distribution function can be used to describe discrete, continuous, and mixed random variables ✓
+
+---
+
+## Question 22
+**Multiple answers:**
+- Unbiasedness ✓
+- Consistency ✓
+
+---
+
+## Question 23
+**Normal distribution**
+
+---
+
+## Question 24
+**Multiple answer:**
+- Null hypothesis is true and it is rejected ✓
+
+This is the definition of a Type I error (false positive).
+
+---
+
+## Question 25
+**Confidence interval**
+
+---
+
+## Question 26
+**Multiple answers:**
+- The population variance is unknown ✓
+- The sample size is comparatively small ✓
+
+---
+
+## Question 27
+**Dataframe object**
+
+---
+
+## Question 28
+**Gender data**
+
+---
+
+## Question 29
+**JSON format**
+
+---
+
+## Question 30
+**JSON**
+
+---
+
+## Question 31
+**re**
+
+---
+
+## Question 32
+**Multiple answers:**
+- sub() ✓
+- subn() ✓
+- split() ✓
+- findall() ✓
+
+All are regex methods in Python.
+
+---
+
+## Question 33
+**NaN**
+
+---
+
+## Question 34
+**info()**
+
+---
+
+## Question 35
+**concat()**
+
+---
+
+## Question 36
+**Seaborn**
+
+---
+
+## Question 37
+**Plotly**
+
+(Bokeh is also interactive, but Plotly is more commonly known for these features)
+
+---
+
+## Question 38
+**PyPlot**
+
+---
+
+## Question 39
+**describe()**
+
+---
+
+## Question 40
+**norm**
+
+The norm module from scipy.stats is used for probability distribution functions.
