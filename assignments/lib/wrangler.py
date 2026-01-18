@@ -35,11 +35,11 @@ except ImportError:
 # Check column names and sample values first
 def print_col_info(df):
     tu.styled_display("Column info:")
-    print(f"{tu.bold_text("Columns:")} {df.columns.tolist()}")
-    print(f"{tu.bold_text("Shape:")} {df.shape}")
-    print(f"\n{tu.bold_text("Dtypes:")}\n{"="*7}\n{df.dtypes}")
+    print(f"{tu.bold_text('Columns:')} {df.columns.tolist()}")
+    print(f"{tu.bold_text('Shape:')} {df.shape}")
+    print(f"\n{tu.bold_text('Dtypes:')}\n{'='*7}\n{df.dtypes}")
 
-    print(f"\n{tu.bold_text("Sample values for object columns:")}")
+    print(f"\n{tu.bold_text('Sample values for object columns:')}")
     print("="*70)
     for col in df.select_dtypes("object").columns:
         print(f"{col}: {df[col].head(3).tolist()}")
