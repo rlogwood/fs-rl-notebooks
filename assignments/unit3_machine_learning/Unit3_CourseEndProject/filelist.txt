@@ -1,0 +1,10 @@
+README.md
+requirements.txt
+EmployeeTurnover.ipynb
+EmployeeTurnover.pdf
+HR_comma_sep.csv
+ModelPerformanceAnalysis.md
+MultifoldTerminology.md
+SMOTE_and_Alternatives.md
+notebook_table_of_contents.png
+lib/*.py
