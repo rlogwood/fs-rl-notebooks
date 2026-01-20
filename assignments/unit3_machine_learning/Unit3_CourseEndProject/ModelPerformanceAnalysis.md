@@ -2,12 +2,15 @@
 
 # Table of Contents
 <!-- TOC -->
+* [Model Performance and Anlysis](#model-performance-and-anlysis)
+* [Table of Contents](#table-of-contents)
 * [Performance Termnology](#performance-termnology)
     * [Confusion Matrix Terms](#confusion-matrix-terms-)
     * [Rate Terms](#rate-terms-)
     * [Visual Reference (Confusion Matrix)](#visual-reference-confusion-matrix)
     * [Employee Turnover Example](#employee-turnover-example-)
     * [Classification Metrics Summary](#classification-metrics-summary)
+    * [Metric Definitions](#metric-definitions)
     * [Key Contrasts](#key-contrasts-)
     * [How to Choose the Right Metric](#how-to-choose-the-right-metric-)
 * [How to Choose the Right Metric](#how-to-choose-the-right-metric--1)
@@ -81,6 +84,20 @@
   | ROC-AUC     | Area under TPR vs FPR curve                     | How well does the model rank/separate classes overall?     |                                                                                                                                 
                                                                                                                                                                                                                                                                  
   (TP=True Positive, TN=True Negative, FP=False Positive, FN=False Negative)                                                                                                                                                                                     
+
+[↑ Back to TOC](#table-of-contents)
+### Metric Definitions
+  | Metric | Definition |                                                                                                                                                                                                                                        
+  |--------|------------|                                                                                                                                                                                                                                        
+  | Accuracy | Percentage of all predictions that are correct |                                                                                                                                                                                                  
+  | Precision | Of predicted positives, how many are actually positive |                                                                                                                                                                                         
+  | Recall | Of actual positives, how many did we correctly identify |                                                                                                                                                                                           
+  | F1-Score | Harmonic mean of Precision and Recall (balances both) |                                                                                                                                                                                           
+  | ROC-AUC | Model's ability to distinguish between classes across all thresholds |   
+
+> NOTE: ROC-AUC - "Area Under the Receiver Operating Characteristic Curve."     
+>  - ROC: Receiver Operating Characteristic                                                                                                                                                                                                
+>  - AUC: Area Under the Curve    
                                                                                                                                                                                                                                                                  
 [↑ Back to TOC](#table-of-contents)
 ### Key Contrasts                                                                                                                                                                                                                                                  
