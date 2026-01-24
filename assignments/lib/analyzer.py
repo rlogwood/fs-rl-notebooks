@@ -255,5 +255,208 @@ def anova_for_column(df, group_by_column, column):
     variance_decomposition(df, grouped_by_series, column)
 
 
+# def imbalance_analysis(df, group_by_column, column):
+#     (grouped_by_series, group_stats) = group_by_stats_for_column(df, group_by_column, column)
+#     statistical_significance_for_groups(df, grouped_by_series)
+#     transaction_range_analysis(df, grouped_by_series)
+#     percentile_analysis(df, grouped_by_series)
+#     imbalance_ratio_analysis(df, grouped_by_series)
+#     p_value_analysis(df, grouped_by_series)
 
 
+import pandas as pd
+import numpy as np
+
+
+def detect_outliers_iqr(df, column):
+    """
+    Detect outliers using IQR (Interquartile Range) method
+    """
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+
+    # Define outlier boundaries
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Find outliers
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+
+    return {
+        'column': column,
+        'total_outliers': len(outliers),
+        'percentage': f"{(len(outliers) / len(df)) * 100:.1f}%",
+        'lower_bound': lower_bound,
+        'upper_bound': upper_bound,
+        'outlier_indices': outliers.index.tolist()
+    }
+
+
+import numpy as np
+
+
+def check_imbalance_v1(class_counts):
+    """
+    Check if dataset is imbalanced
+
+    Parameters:
+    -----------
+    class_counts : dict or array-like
+        Counts of each class {class_label: count}
+
+    Returns:
+    --------
+    dict with ratio and severity assessment
+    """
+    if isinstance(class_counts, dict):
+        counts = np.array(list(class_counts.values()))
+    else:
+        counts = np.array(class_counts)
+
+    majority_count = counts.max()
+    minority_count = counts.min()
+    ratio = majority_count / minority_count
+
+    # Determine severity
+    if ratio < 1.5:
+        severity = "Balanced ✅"
+        action = "No special handling needed"
+    elif ratio < 3:
+        severity = "Slight Imbalance ⚠️"
+        action = "Monitor metrics closely"
+    elif ratio < 9:
+        severity = "Moderate Imbalance 🟡"
+        action = "Use class weights or resampling"
+    elif ratio < 99:
+        severity = "Severe Imbalance 🟠"
+        action = "Special techniques required (SMOTE, heavy class weights)"
+    else:
+        severity = "Extreme Imbalance 🔴"
+        action = "Consider anomaly detection approaches"
+
+    return {
+        'ratio': f"{ratio:.2f}:1",
+        'majority_class': majority_count,
+        'minority_class': minority_count,
+        'minority_percentage': f"{(minority_count / counts.sum()) * 100:.2f}%",
+        'severity': severity,
+        'recommended_action': action
+    }
+
+
+import numpy as np
+import pandas as pd
+
+
+def check_imbalance(class_counts, verbose=True):
+    """
+    Check if dataset is imbalanced for binary or multi-class problems
+
+    Parameters:
+    -----------
+    class_counts : dict, pd.Series, or array-like
+        Counts of each class {class_label: count} or array of counts
+    verbose : bool
+        Whether to print detailed information
+
+    Returns:
+    --------
+    dict with comprehensive imbalance analysis
+    """
+    # Convert to dict format
+    if isinstance(class_counts, pd.Series):
+        class_dict = class_counts.to_dict()
+        counts = class_counts.values
+    elif isinstance(class_counts, dict):
+        class_dict = class_counts
+        counts = np.array(list(class_counts.values()))
+    else:
+        counts = np.array(class_counts)
+        class_dict = {i: count for i, count in enumerate(counts)}
+
+    # Basic statistics
+    total = counts.sum()
+    n_classes = len(counts)
+    majority_count = counts.max()
+    minority_count = counts.min()
+    ratio = majority_count / minority_count
+
+    # Calculate imbalance ratio for each class vs majority
+    majority_idx = counts.argmax()
+    minority_idx = counts.argmin()
+
+    # Determine severity based on worst-case ratio
+    if ratio < 1.5:
+        severity = "Balanced ✅"
+        action = "No special handling needed"
+    elif ratio < 3:
+        severity = "Slight Imbalance ⚠️"
+        action = "Monitor metrics closely"
+    elif ratio < 9:
+        severity = "Moderate Imbalance 🟡"
+        action = "Use class weights or resampling"
+    elif ratio < 99:
+        severity = "Severe Imbalance 🟠"
+        action = "Special techniques required (SMOTE, heavy class weights)"
+    else:
+        severity = "Extreme Imbalance 🔴"
+        action = "Consider anomaly detection approaches"
+
+    # Per-class analysis
+    class_analysis = []
+    class_labels = list(class_dict.keys())
+
+    for i, (label, count) in enumerate(class_dict.items()):
+        percentage = (count / total) * 100
+        ratio_to_majority = majority_count / count if count > 0 else np.inf
+        ratio_to_minority = count / minority_count if minority_count > 0 else np.inf
+
+        class_analysis.append({
+            'class': label,
+            'count': count,
+            'percentage': percentage,
+            'ratio_to_majority': ratio_to_majority,
+            'ratio_to_minority': ratio_to_minority
+        })
+
+    result = {
+        'n_classes': n_classes,
+        'total_samples': int(total),
+        'majority_class': class_labels[majority_idx],
+        'majority_count': int(majority_count),
+        'minority_class': class_labels[minority_idx],
+        'minority_count': int(minority_count),
+        'minority_percentage': f"{(minority_count / total) * 100:.2f}%",
+        'imbalance_ratio': f"{ratio:.2f}:1",
+        'severity': severity,
+        'recommended_action': action,
+        'class_analysis': class_analysis
+    }
+
+    if verbose:
+        print("=" * 70)
+        print("CLASS IMBALANCE ANALYSIS")
+        print("=" * 70)
+        print(f"\nNumber of classes: {n_classes}")
+        print(f"Total samples: {total:,}")
+        print(f"\nClass Distribution:")
+        print("-" * 70)
+
+        # Sort by count for better visualization
+        sorted_analysis = sorted(class_analysis, key=lambda x: x['count'], reverse=True)
+
+        for item in sorted_analysis:
+            bar_length = int(item['percentage'] / 2)  # Scale for display
+            bar = "█" * bar_length
+            print(f"  Class {item['class']:>10}: {item['count']:>8,} ({item['percentage']:>6.2f}%) {bar}")
+
+        print("\n" + "-" * 70)
+        print(f"Majority class: {result['majority_class']} ({majority_count:,} samples)")
+        print(f"Minority class: {result['minority_class']} ({minority_count:,} samples)")
+        print(f"Imbalance ratio: {result['imbalance_ratio']}")
+        print(f"\nSeverity: {severity}")
+        print(f"Recommended action: {action}")
+        print("=" * 70)
+
+    return result
