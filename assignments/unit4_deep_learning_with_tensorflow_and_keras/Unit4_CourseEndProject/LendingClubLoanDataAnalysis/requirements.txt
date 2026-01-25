@@ -20,3 +20,5 @@ notebook>=7.0.0
 #scipy>=1.10.0
 #xgboost
 #plotly
+
+pytest
