@@ -1,0 +1,10 @@
+README.md
+requirements.txt
+ForecastHourlyBikeRentals.ipynb
+ForecaseHourlyBikeRentals.pdf
+notebook_toc.png
+lib/*.py
+data/FloridaBikeRentals.csv
+data/bike_rental_features.csv
+docs/UnderstandingR2Scores.md
+docs/UnderstandingRegularization.md

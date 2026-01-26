@@ -2,11 +2,10 @@ from pandas import describe_option
 
 try:
     # When imported as part of a package
-    from . import text_util as tu, imputer as im
+    from . import text_util as tu
 except ImportError:
     # When run as a standalone script
     import text_util as tu
-    import imputer as im
 
 # Check column names and sample values first
 def print_col_info(df):

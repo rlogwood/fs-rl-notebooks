@@ -2,11 +2,10 @@ import pandas as pd
 
 try:
     # When imported as part of a package
-    from . import text_util as tu #, imputer as im
+    from . import text_util as tu
 except ImportError:
     # When run as a standalone script
     import text_util as tu
-    #import imputer as im
 
 
 def inspect_variable(var, var_name="variable"):
