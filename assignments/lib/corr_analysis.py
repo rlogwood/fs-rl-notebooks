@@ -40,17 +40,12 @@ def find_high_corr_pairs(df: pd.DataFrame, correlation_threshold: float = 0.7) -
     return high_corr_pairs
 
 
-def drop_highly_correlated_features(df: pd.DataFrame, target_col: str, cols_to_drop: Union[str, Sequence[str]] = [], correlation_threshold: float = 0.7):
+def drop_highly_correlated_features(df: pd.DataFrame, target_col: str, correlation_threshold: float = 0.7):
     print(tu.bold_text("\nDROPPING HIGHLY CORRELATED FEATURES"))
 
-    if cols_to_drop not in cols_to_drop:
-        cols_to_drop.append(target_col)
-
-    print(f"- Target column: {target_col}")
-    print(f"- Columns to drop: {cols_to_drop}")
 
     # Get correlation matrix for numeric features (excluding target)
-    numeric_features = df.select_dtypes(include=[np.number]).columns.drop(cols_to_drop)
+    numeric_features = df.select_dtypes(include=[np.number]).columns.drop(target_col)
 
     print(f"\n- Number of numeric features: {len(numeric_features)}")
     print("\t",end="")

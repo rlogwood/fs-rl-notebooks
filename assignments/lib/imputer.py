@@ -1,33 +1,11 @@
-from typing import List, Tuple
-import pandas as pd
+# from typing import List, Tuple
+# import pandas as pd
+#
+# DEFAULT_MISSING_VALUES = ("", "NA", "N/A", "-", "null", "None", "?")
+# DEFAULT_NEW_VALUE = "unknown"
+#
+# def replace_missing_values(df: pd.Series,
 
-DEFAULT_MISSING_VALUES = ("", "NA", "N/A", "-", "null", "None", "?")
-DEFAULT_NEW_VALUE = "unknown"
-
-def replace_missing_values(df: pd.Series,
-    missing_values: List[str] = DEFAULT_MISSING_VALUES,
-    new_value: str = DEFAULT_NEW_VALUE) -> pd.Series:
-    # missing str value lambda
-    missing_str_val = lambda s: s.str.strip().isin(missing_values)
-
-    # missing numeric value lambda
-    missing_num_val = lambda v: v.isin(missing_values)
-    df_unknown = df.copy()
-
-    # Get only object columns
-    object_columns = df.select_dtypes(include=['object']).columns
-
-    # Apply the lambda function only to object columns
-    if len(object_columns) > 0:
-        mask = df[object_columns].apply(missing_str_val)
-        df_unknown[mask] = new_value
-
-    numeric_columns = df.select_dtypes(include=['number']).columns
-    if len(numeric_columns) > 0:
-        mask = df[numeric_columns].apply(missing_num_val)
-        df_unknown[mask] = pd.NA
-
-    return df_unknown
 
 #
 # # Create both datasets at once
