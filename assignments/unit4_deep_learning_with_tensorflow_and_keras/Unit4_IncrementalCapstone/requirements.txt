@@ -22,3 +22,4 @@ notebook>=7.0.0
 #plotly
 
 pytest
+openpyxl
