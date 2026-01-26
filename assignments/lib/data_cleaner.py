@@ -15,7 +15,7 @@ Enums:
 import pandas as pd
 import numpy as np
 from enum import Enum
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Union
 
 
 class CaseStyle(Enum):
@@ -43,13 +43,33 @@ DEFAULT_MISSING_VALUES = ("", " ", "NA", "N/A", "na", "n/a", "NULL", "null",
                           "unknown", "UNKNOWN")
 
 
+def _apply_case_style(series: pd.Series, case_style: CaseStyle) -> pd.Series:
+    """Apply case transformation to a Series (only non-null values)."""
+    if case_style == CaseStyle.ORIGINAL:
+        return series
+
+    result = series.copy()
+    non_null_mask = result.notna()
+
+    if case_style == CaseStyle.TITLE:
+        result.loc[non_null_mask] = result.loc[non_null_mask].str.title()
+    elif case_style == CaseStyle.UPPER:
+        result.loc[non_null_mask] = result.loc[non_null_mask].str.upper()
+    elif case_style == CaseStyle.LOWER:
+        result.loc[non_null_mask] = result.loc[non_null_mask].str.lower()
+
+    return result
+
+
 def clean_object_columns(
     df: pd.DataFrame,
     columns: Optional[List[str]] = None,
     missing_values: Tuple[str, ...] = DEFAULT_MISSING_VALUES,
     replacement: Optional[str] = None,
     case_style: CaseStyle = CaseStyle.ORIGINAL,
-    strip_whitespace: bool = True
+    column_case_styles: Optional[Dict[str, CaseStyle]] = None,
+    strip_whitespace: bool = True,
+    normalize_spaces: bool = False
 ) -> pd.DataFrame:
     """
     Clean string/object columns by replacing missing value placeholders and standardizing format.
@@ -59,14 +79,29 @@ def clean_object_columns(
         columns: Specific columns to clean. If None, cleans all object columns
         missing_values: String values to treat as missing
         replacement: Value to replace missing with. None means np.nan
-        case_style: CaseStyle enum value (ORIGINAL, TITLE, UPPER, LOWER)
+        case_style: Default CaseStyle enum value (ORIGINAL, TITLE, UPPER, LOWER)
+        column_case_styles: Dict mapping column names to CaseStyle for per-column control.
+            Columns not in dict will use the case_style parameter as fallback.
+            Example: {'name': CaseStyle.TITLE, 'state': CaseStyle.UPPER}
         strip_whitespace: Whether to strip leading/trailing whitespace
+        normalize_spaces: Whether to collapse multiple internal spaces into one
+            Example: "John    Smith" -> "John Smith"
 
     Returns:
         Cleaned DataFrame
 
-    Example:
+    Examples:
+        # Simple usage - same case style for all columns
         df = clean_object_columns(df, case_style=CaseStyle.TITLE)
+
+        # Per-column case styles
+        df = clean_object_columns(df,
+            column_case_styles={'name': CaseStyle.TITLE, 'state': CaseStyle.UPPER},
+            case_style=CaseStyle.ORIGINAL  # fallback for other columns
+        )
+
+        # Normalize internal spaces
+        df = clean_object_columns(df, normalize_spaces=True)
     """
     result = df.copy()
 
@@ -95,15 +130,18 @@ def clean_object_columns(
         else:
             result.loc[mask, col] = replacement
 
-        # Step 3: Apply case transformation (only to non-null values)
-        if case_style != CaseStyle.ORIGINAL:
+        # Step 3: Determine case style for this column
+        col_case_style = case_style  # default
+        if column_case_styles is not None and col in column_case_styles:
+            col_case_style = column_case_styles[col]
+
+        # Step 4: Apply case transformation (only to non-null values)
+        result[col] = _apply_case_style(result[col], col_case_style)
+
+        # Step 5: Normalize internal spaces (only to non-null values)
+        if normalize_spaces:
             non_null_mask = result[col].notna()
-            if case_style == CaseStyle.TITLE:
-                result.loc[non_null_mask, col] = result.loc[non_null_mask, col].str.title()
-            elif case_style == CaseStyle.UPPER:
-                result.loc[non_null_mask, col] = result.loc[non_null_mask, col].str.upper()
-            elif case_style == CaseStyle.LOWER:
-                result.loc[non_null_mask, col] = result.loc[non_null_mask, col].str.lower()
+            result.loc[non_null_mask, col] = result.loc[non_null_mask, col].str.replace(r'\s+', ' ', regex=True)
 
     return result
 
@@ -192,7 +230,7 @@ def clean_dataframe(
 
     Example:
         df = clean_dataframe(df,
-            object_config={'case_style': CaseStyle.TITLE},
+            object_config={'case_style': CaseStyle.TITLE, 'normalize_spaces': True},
             numeric_config={'strategy': FillStrategy.MEDIAN}
         )
     """

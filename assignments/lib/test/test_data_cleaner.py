@@ -157,6 +157,106 @@ class TestCleanObjectColumns:
         assert pd.isna(result['name'][1])
         assert pd.isna(result['name'][3])
 
+    def test_normalize_spaces_collapses_multiple_spaces(self):
+        """normalize_spaces=True should collapse multiple internal spaces into one."""
+        df = pd.DataFrame({
+            'name': ['John    Smith', 'Jane   Doe', 'Bob'],
+            'address': ['123   Main    St', 'N/A', '456 Oak Ave']
+        })
+        result = clean_object_columns(df, normalize_spaces=True)
+
+        assert result['name'][0] == 'John Smith'
+        assert result['name'][1] == 'Jane Doe'
+        assert result['address'][0] == '123 Main St'
+        assert result['address'][2] == '456 Oak Ave'
+
+    def test_normalize_spaces_default_false(self):
+        """normalize_spaces should be False by default (preserve internal spaces)."""
+        df = pd.DataFrame({'name': ['John    Smith']})
+        result = clean_object_columns(df)
+
+        # Multiple spaces should be preserved when normalize_spaces=False (default)
+        assert result['name'][0] == 'John    Smith'
+
+    def test_normalize_spaces_does_not_affect_nan(self):
+        """normalize_spaces should not affect NaN values."""
+        df = pd.DataFrame({'name': ['John    Smith', 'NA', 'Jane']})
+        result = clean_object_columns(df, normalize_spaces=True)
+
+        assert result['name'][0] == 'John Smith'
+        assert pd.isna(result['name'][1])
+
+    def test_column_case_styles_per_column(self):
+        """column_case_styles should apply different case styles to different columns."""
+        df = pd.DataFrame({
+            'name': ['john doe', 'jane smith'],
+            'state': ['california', 'new york'],
+            'code': ['abc', 'xyz']
+        })
+        result = clean_object_columns(df,
+            column_case_styles={
+                'name': CaseStyle.TITLE,
+                'state': CaseStyle.UPPER
+            },
+            case_style=CaseStyle.ORIGINAL  # fallback for 'code'
+        )
+
+        # 'name' should be Title Case
+        assert result['name'][0] == 'John Doe'
+        assert result['name'][1] == 'Jane Smith'
+
+        # 'state' should be UPPER CASE
+        assert result['state'][0] == 'CALIFORNIA'
+        assert result['state'][1] == 'NEW YORK'
+
+        # 'code' should be unchanged (ORIGINAL fallback)
+        assert result['code'][0] == 'abc'
+        assert result['code'][1] == 'xyz'
+
+    def test_column_case_styles_fallback_to_case_style(self):
+        """Columns not in column_case_styles should use case_style as fallback."""
+        df = pd.DataFrame({
+            'name': ['john'],
+            'city': ['boston'],
+            'country': ['usa']
+        })
+        result = clean_object_columns(df,
+            column_case_styles={'name': CaseStyle.TITLE},
+            case_style=CaseStyle.UPPER  # fallback for city and country
+        )
+
+        assert result['name'][0] == 'John'      # from column_case_styles
+        assert result['city'][0] == 'BOSTON'    # from case_style fallback
+        assert result['country'][0] == 'USA'    # from case_style fallback
+
+    def test_column_case_styles_empty_dict(self):
+        """Empty column_case_styles should use case_style for all columns."""
+        df = pd.DataFrame({'name': ['john'], 'city': ['boston']})
+        result = clean_object_columns(df,
+            column_case_styles={},
+            case_style=CaseStyle.UPPER
+        )
+
+        assert result['name'][0] == 'JOHN'
+        assert result['city'][0] == 'BOSTON'
+
+    def test_column_case_styles_with_normalize_spaces(self):
+        """column_case_styles should work together with normalize_spaces."""
+        df = pd.DataFrame({
+            'name': ['john    doe'],
+            'state': ['new    york']
+        })
+        result = clean_object_columns(df,
+            column_case_styles={
+                'name': CaseStyle.TITLE,
+                'state': CaseStyle.UPPER
+            },
+            normalize_spaces=True
+        )
+
+        assert result['name'][0] == 'John Doe'
+        assert result['state'][0] == 'NEW YORK'
+
 
 # =============================================================================
 # Tests for clean_numeric_columns
