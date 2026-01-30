@@ -1,2 +1,4 @@
 lib
 data/data
+.output.txt
+tmp_src
