@@ -1,0 +1,14 @@
+{
+  "_comment": "Example custom import configuration for notebooks",
+  "_description": "Copy this file to .notebook_imports.json and customize for your notebook's needs",
+
+  "skip_tensorflow": false,
+  "skip_sklearn": false,
+  "skip_visualization": false,
+
+  "additional_imports": [
+    "import torch",
+    "from transformers import pipeline",
+    "import cv2"
+  ]
+}
