@@ -1,0 +1,4 @@
+assignments/unit4_deep_learning_with_tensorflow_and_keras/Unit4_IncrementalCapstone/data/Churn_Modeling.csv filter=lfs diff=lfs merge=lfs -text
+assignments/unit4_deep_learning_with_tensorflow_and_keras/Unit4_IncrementalCapstone/data/DENTAL_1.NPZ filter=lfs diff=lfs merge=lfs -text
+assignments/unit4_deep_learning_with_tensorflow_and_keras/Unit4_IncrementalCapstone/data/Face_mask_detection.zip filter=lfs diff=lfs merge=lfs -text
+assignments/unit4_deep_learning_with_tensorflow_and_keras/Unit4_IncrementalCapstone/data/GrammarandProductReviews.xlsx filter=lfs diff=lfs merge=lfs -text
