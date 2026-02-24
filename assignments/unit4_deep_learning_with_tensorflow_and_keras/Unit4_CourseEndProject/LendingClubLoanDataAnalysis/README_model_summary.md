@@ -8,30 +8,31 @@ After comprehensive experimentation with imbalance handling strategies and thres
 ## 1. Imbalance Handling Strategy Selection
 
 ### The Challenge
-Our dataset exhibits **Moderate Imbalance 🟡**:
-#### TODO: FIX ME! hard coded class names, capped at 2 classes
+Our dataset exhibits **Moderate Imbalance 🟡** for **not.fully.paid**:
+
 - **Class 0 (Paid)**: 8,045 samples (83.99%)
 - **Class 1 (Default)**: 1,533 samples (16.01%)
 - **Imbalance Ratio**: 5.25:1
+
 
 ### Strategies Tested
 We compared 5 imbalance handling strategies:
 
 | Strategy | Training Samples | Class Distribution | Validation val_auc | Best Epoch |
 |----------|------------------|-------------------|----------------|------------|
-| **none** | 5,363 | (0:4,505), (1:858) | 0.6904 | 43 |
-| **smote_full** | 9,010 | (0:4,505), (1:4,505) | 0.6776 | 5 |
-| **smote_partial** | 6,757 | (0:4,505), (1:2,252) | 0.6552 | 5 |
-| **class_weights** | 5,363 | (0:4,505), (1:858) | 0.6659 | 5 |
-| **smote_partial+weights** | 6,757 | (0:4,505), (1:2,252) | 0.6702 | 5 |
+| **none** | 5,363 | (0:4,505), (1:858) | 0.6992 | 24 |
+| **smote_full** | 9,010 | (0:4,505), (1:4,505) | 0.6795 | 5 |
+| **smote_partial** | 6,757 | (0:4,505), (1:2,252) | 0.6875 | 5 |
+| **class_weights** | 5,363 | (0:4,505), (1:858) | 0.6650 | 5 |
+| **smote_partial+weights** | 6,757 | (0:4,505), (1:2,252) | 0.6594 | 5 |
 
-**Calculated Class Weights**: 
-- Class 0 (Paid): 0.595
-- Class 1 (Default): 3.125
+**Calculated Class Weights**:
+- Class 0: 0.595
+- Class 1: 3.125
 
 ### Why smote_partial+weights?
 
-1. **Best Validation Performance**: Achieved highest validation val_auc of **0.6702**, outperforming all other strategies
+1. **Best Validation Performance**: Achieved highest validation val_auc of **0.6594**, outperforming all other strategies
 2. **Optimal Training Signal**: Converged at epoch 5
 
 ---
@@ -49,7 +50,7 @@ We chose **`monitor='val_auc'`** with **`patience=5`** because:
 
 **Training Dynamics**:
 - Best epoch: 5
-- Best val_auc: **0.6702**
+- Best val_auc: **0.6594**
 
 ---
 
@@ -78,8 +79,8 @@ Per loan costs:
 
 At threshold 0.3:
 - Missed defaults (FN): 3 × $10,500 = $31,500
-- Incorrect flags (FP): 2409 × $500 = $1,204,500
-- Total cost: $1,236,000
+- Incorrect flags (FP): 2399 × $500 = $1,199,500
+- Total cost: $1,231,000
 ```
 
 ---
@@ -92,20 +93,20 @@ At threshold 0.3:
 ```
                 Predicted
                 Paid    Default
-Actual  Paid     5      2,409
+Actual  Paid     15      2,399
         Default   3        457
 ```
 
 **Breakdown**:
-- **True Negatives (TN)**: 5 (0.2% of paid loans correctly identified)
-- **False Positives (FP)**: 2,409 (99.8% of paid loans flagged for review)
+- **True Negatives (TN)**: 15 (0.6% of paid loans correctly identified)
+- **False Positives (FP)**: 2,399 (99.4% of paid loans flagged for review)
 - **False Negatives (FN)**: 3 (0.7% missed defaults - CRITICAL METRIC)
 - **True Positives (TP)**: 457 (99.3% defaults caught)
 
 **Key Metrics**:
-- **Test AUC-ROC**: 0.6417
+- **Test AUC-ROC**: 0.6372
 - **Recall (Default Class)**: 99.35%
-- **Precision (Default Class)**: 15.95%
+- **Precision (Default Class)**: 16.00%
 
 ### Why This Trade-off Makes Sense
 1. **Asymmetric Costs**: Missing a $15,000 default is **21x more expensive** than a manual review
@@ -160,4 +161,4 @@ Model: "sequential"
 3. **Ensemble Methods**: Combine multiple models for improved robustness
 4. **Hyperparameter Tuning**: Optimize learning rate, network depth, and dropout rates
 
-Our goal is to improve **AUC-ROC beyond 0.6417** while maintaining **high recall (>95%)**.
+Our goal is to improve **AUC-ROC beyond 0.6372** while maintaining **high recall (>95%)**.
